@@ -8,12 +8,17 @@ type SignInFormData = {
 };
 
 export default function SignIn() {
-  const { register, handleSubmit, formState } = useForm();
-  const { errors } = formState;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  console.log(errors);
   const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(values);
   };
+
   return (
     <Flex w="100vw" h="100vh" align="center" justify="center">
       <Flex
@@ -31,13 +36,15 @@ export default function SignIn() {
             name="email"
             type="email"
             label="E-mail"
-            {...register("email")}
+            error={errors.email}
+            {...(register("email"), { required: "E-mail obrigatório" })}
           />
           <Input
             name="password"
             type="password"
             label="Senha"
-            {...register("password")}
+            error={errors.password}
+            {...(register("password"), { required: "Senha obrigatória" })}
           />
         </Stack>
         <Button
@@ -45,7 +52,7 @@ export default function SignIn() {
           mt="6"
           colorScheme="pink"
           size="lg"
-          isLoading={formState.isSubmitting}
+          isLoading={isSubmitting}
         >
           Entrar
         </Button>
